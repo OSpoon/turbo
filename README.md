@@ -8,7 +8,7 @@ Turbo是一款Java实现的轻量级流程引擎，是公司内多个低代码�
 
 2. 轻量级的库表操作
 
-3. 支持流程回滚操作 
+3. 支持流程回滚操作
 
 # 核心能力
 
@@ -24,7 +24,7 @@ Turbo是一款Java实现的轻量级流程引擎，是公司内多个低代码�
 
 5. 流程回滚：从当前用户节点开始回滚，回滚至上一个用户节点或者开始节点
 
-6. 执行轨迹追溯：查看流程实例的执行轨迹，可用于快照  
+6. 执行轨迹追溯：查看流程实例的执行轨迹，可用于快照
 
 # 为什么选择Turbo
 
@@ -162,7 +162,7 @@ Turbo的定位是兼容BPMN2.0的轻量级流程引擎（而非平台），支�
 
 #### 3.2 顺序流 (SequenceFlow)
 
-记录节点之间的执行顺序，可以配置执行的条件conditions（比如用户点击了“同意”作为输入），conditions只有在与网关节点Gateway配合使用时生效，由Gateway决定conditions的执行策略。 
+记录节点之间的执行顺序，可以配置执行的条件conditions（比如用户点击了“同意”作为输入），conditions只有在与网关节点Gateway配合使用时生效，由Gateway决定conditions的执行策略。
 
 # 快速开始
 
@@ -184,7 +184,7 @@ Turbo的定位是兼容BPMN2.0的轻量级流程引擎（而非平台），支�
 
 ### JDK 1.8 版本
 JDK 1.8 支持的最后版本是 1.2.0 版本，后续版本除非出现重大 bug 修复，后续不再进行更新。
-```
+```xml
 <dependency>
   <groupId>com.didiglobal.turbo</groupId>
   <artifactId>engine</artifactId>
@@ -194,7 +194,7 @@ JDK 1.8 支持的最后版本是 1.2.0 版本，后续版本除非出现重大 b
 
 
 开发demo，非必须依赖
-```
+```xml
 <dependency>
   <groupId>com.didiglobal.turbo</groupId>
   <artifactId>demo</artifactId>
@@ -203,14 +203,19 @@ JDK 1.8 支持的最后版本是 1.2.0 版本，后续版本除非出现重大 b
 ```
 
 ### JDK 21 版本
-从 1.3.0 版本开始，JDK 21 默认支持，并且会持续进行更新。
+目前 Turbo 已经完成了 JDK 21 版本的支持，为了帮助你更好地使用以及上手，可以参考该应用手册进行解决，整体来说，从 Turbo 1.2.x 升级到 1.3.x 版本后的核心能力都是兼容的，对于 90% 以上的常规用户而言（指未做深度 SPI 扩展或源码定制的用户），可以非常简单的完成升级。
+
+⚠️ 注意：
+
+1. 从 1.3.0 版本开始，JDK 21 默认支持，并且会持续进行更新。
+2. 1.3.0 版本开始，Turbo 开始支持 JDK 21 版本，为了更好地支持 JDK 21 版本，我们对部分代码进行了调整，可能会导致一些兼容性问题，建议在升级前先进行测试。
 
 **流程引擎核心**
 ```xml
 <dependency>
   <groupId>com.didiglobal.turbo</groupId>
   <artifactId>engine</artifactId>
-  <version>1.3.0</version>
+  <version>1.3.1</version>
 </dependency>
 ```
 
@@ -236,14 +241,23 @@ JDK 1.8 支持的最后版本是 1.2.0 版本，后续版本除非出现重大 b
 
 执行[建表语句](engine/src/main/resources/turbo.db.create/turbo.mysql.sql)，在属性文件中配置属性信息
 
-```
+```properties
 # 必要属性
 spring.datasource.dynamic.primary=engine
 spring.datasource.dynamic.datasource.engine.type=com.alibaba.druid.pool.DruidDataSource
 spring.datasource.dynamic.datasource.engine.username=username
 spring.datasource.dynamic.datasource.engine.password=password
 spring.datasource.dynamic.datasource.engine.driver-class-name=com.mysql.jdbc.Driver
-spring.datasource.dynamic.datasource.engine.url=jdbc:mysql://127.0.0.1:3306/db_engine
+spring.datasource.dynamic.datasource.engine.url=jdbc:mysql://127.0.0.1:3306/turbo?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&autoReconnect=true
+
+## 循环依赖开关，目前版本还未解决循环依赖，需要开启支持
+spring.main.allow-circular-references=true
+```
+
+然后由于 JDK 21 升级之后，Spring Boot 原先的 SPI 机制发现变化，因此如果需要使用 Druid 相关依赖的话，需要在配置文件下新增 Druid 装配设置，即新增 META-INF/spring 文件夹并新增 org.springframework.boot.autoconfigure.AutoConfiguration.imports 文件，内容如下：
+
+```properties
+spring.datasource.dynamic.datasource.engine.type=com.alibaba.druid.pool.DruidDataSource
 ```
 
 ## 4. 根据demo开始你的Turbo之旅吧
