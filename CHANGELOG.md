@@ -3,6 +3,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.1] - 2025-11-14
+### Bugfix
+- Fix v1.3.0 release issues
+
 ## [1.3.0] - 2025-10-29
 ### Changed
  - JDK Upgrade: Upgraded from JDK 8 to JDK 21
