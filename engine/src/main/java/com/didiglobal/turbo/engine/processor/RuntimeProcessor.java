@@ -434,6 +434,7 @@ public class RuntimeProcessor {
                 FlowElement flowElement = FlowModelUtil.getFlowElement(flowElementMap, nodeInstancePO.getNodeKey());
                 nodeInstance.setModelKey(flowElement.getKey());
                 nodeInstance.setModelName(FlowModelUtil.getElementName(flowElement));
+                nodeInstance.setFlowElementType(flowElement.getType());
                 if (MapUtils.isNotEmpty(flowElement.getProperties())) {
                     nodeInstance.setProperties(flowElement.getProperties());
                 } else {
@@ -590,6 +591,7 @@ public class RuntimeProcessor {
             }
             nodeInstance.setModelKey(flowElement.getKey());
             nodeInstance.setModelName(FlowModelUtil.getElementName(flowElement));
+            nodeInstance.setFlowElementType(flowElement.getType());
             if (MapUtils.isNotEmpty(flowElement.getProperties())) {
                 nodeInstance.setProperties(flowElement.getProperties());
             } else {
